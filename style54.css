@@ -1,0 +1,386 @@
+:root {
+    --description: "A fast-paced neon air hockey game built with Canvas 2D, featuring responsive mouse and touch controls, dynamic physics, CPU opponent AI, particle effects, sound design, and arcade-style UI. Track stats like streaks, top speed, and power hits while racing to 7 in a glowing, high-energy arena. Includes slo-mo game point moments, screen shake, and confetti victory effects for a polished arcade experience.";
+    --keywords: "air hockey, arcade game, canvas game, javascript game, neon, sports game, physics, puck, mallet, cpu ai, particle effects, confetti, sound effects, touch controls, mouse controls, responsive, html5 canvas, game ui, codepen, codepen challenge";
+    --content-language: "en";
+    --generator: "HTML5, CSS3 (Flexbox, Animations, Keyframes), JavaScript, Canvas 2D API";
+
+    --blue: #00d4ff;
+    --red: #ff2d55;
+    --gold: #ffc940;
+    --bg: #04060a;
+    --panel: #080d14;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Orbitron", monospace;
+    overflow: hidden;
+    cursor: none;
+    user-select: none;
+}
+
+html,
+body {
+    overscroll-behavior: none;
+}
+
+#arena {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 760 / 520;
+    margin: 0 auto;
+    touch-action: none;
+}
+
+.screen {
+    cursor: default;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* ── Layout ── */
+#outer {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: min(100vw, 1100px);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2), 0 0 50px rgba(0, 212, 255, 0.1),
+        0 20px 70px rgba(0, 0, 0, 0.8);
+}
+
+#outer {
+    justify-content: center;
+}
+
+/* ── Stat Panels ── */
+.stat-panel {
+    width: 130px;
+    flex-shrink: 0;
+    padding: 16px 10px 12px;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+#stat-left {
+    border-radius: 16px 0 0 16px;
+    border-right: none;
+}
+
+#stat-right {
+    border-radius: 0 16px 16px 0;
+    border-left: none;
+}
+
+.stat-name {
+    font-family: "Orbitron", monospace;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-align: center;
+    width: 100%;
+}
+
+.stat-score {
+    font-family: "Orbitron", monospace;
+    font-weight: 900;
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 6px;
+    text-align: center;
+    width: 100%;
+    letter-spacing: -2px;
+}
+
+.stat-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+    margin: 6px 0 8px;
+}
+
+.stat-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 9px;
+}
+
+.stat-label {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+}
+
+.stat-val {
+    font-family: "Orbitron", monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.stat-footer {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* ── Screens ── */
+#ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    background: rgba(4, 6, 10, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+}
+
+.screen.on {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── Ready ── */
+.ready-inner {
+    text-align: center;
+}
+
+.ready-logo {
+    font-weight: 900;
+    font-size: clamp(42px, 8vw, 72px);
+    line-height: 0.9;
+    color: #fff;
+}
+
+.ready-logo span {
+    display: block;
+    color: var(--blue);
+    text-shadow: 0 0 30px var(--blue), 0 0 70px rgba(0, 212, 255, 0.35);
+}
+
+.ready-sub {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 10px;
+    color: var(--gold);
+    margin-top: 6px;
+    margin-bottom: 28px;
+}
+
+.ready-prompt {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.7);
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+.ready-keys {
+    margin-top: 18px;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Game Over ── */
+.go-emoji {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 12px;
+    animation: emoji-bounce 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.go-face {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 10px;
+    animation: faceBounce 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.go-face {
+    font-size: 60px;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: block;
+    animation: facePop 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes facePop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    65% {
+        transform: scale(1.25);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.go-inner {
+    text-align: center;
+}
+
+.go-who {
+    font-size: clamp(36px, 7vw, 64px);
+    font-weight: 900;
+    line-height: 1;
+}
+
+.go-emoji {
+    font-size: 64px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 14px currentColor);
+}
+
+.go-wins {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 3px;
+}
+
+.go-final {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold);
+    margin: 12px 0 24px;
+}
+
+button {
+    padding: 13px 44px;
+    background: transparent;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+    font-family: "Orbitron", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 4px;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+button:hover {
+    background: var(--blue);
+    color: #000;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+#game-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#outer {
+    width: 1100px;
+    transform-origin: top center;
+}
+
+@media (max-width: 1100px) {
+    #outer {
+        transform: scale(calc(100vw / 1100));
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.go-emoji {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 12px;
+    animation: emoji-bounce 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes emoji-bounce {
+    0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.3) rotate(8deg);
+        opacity: 1;
+    }
+
+    80% {
+        transform: scale(0.9) rotate(-4deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+#gameover-screen.lose-state {
+    background: rgba(20, 4, 8, 0.9);
+}

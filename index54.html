@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Air Hockey Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet'
+        href='https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'>
+    <link rel="stylesheet" href="style54.css">
+
+</head>
+
+<body>
+    <div id="outer">
+        <div id="stat-left" class="stat-panel">
+            <div class="stat-name" style="color:#00d4ff">YOU</div>
+            <div class="stat-score" id="score-p" style="color:#00d4ff;text-shadow:0 0 20px #00d4ff">0</div>
+            <div class="stat-divider"></div>
+            <div class="stat-row"><span class="stat-label">STREAK</span><span class="stat-val"
+                    id="stat-p-streak">0</span></div>
+            <div class="stat-row"><span class="stat-label">TOP SPEED</span><span class="stat-val"
+                    id="stat-p-speed">0</span></div>
+            <div class="stat-row"><span class="stat-label">POWER HITS</span><span class="stat-val"
+                    id="stat-p-power">0</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat-footer">FIRST TO 7 WINS</div>
+        </div>
+
+        <div id="arena">
+            <canvas id="c"></canvas>
+            <div id="mute-btn"></div>
+            <div id="ui">
+            </div>
+        </div>
+        <div id="gameover-screen" class="screen">
+            <div class="go-inner">
+                <div class="go-face" id="go-face">😄</div>
+                <div class="go-who" id="go-who">YOU WIN</div>
+                <div class="go-wins" id="go-wins">GAME · SET · MATCH</div>
+                <div class="go-final" id="go-final">7 – 3</div>
+                <button id="btn-again">PLAY AGAIN</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="stat-right" class="stat-panel">
+        <div class="stat-name" style="color:#ff2d55">CPU</div>
+        <div class="stat-score" id="score-cpu" style="color:#ff2d55;text-shadow:0 0 20px #ff2d55">0</div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span class="stat-label">STREAK</span><span class="stat-val" id="stat-cpu-streak">0</span>
+        </div>
+        <div class="stat-row"><span class="stat-label">TOP SPEED</span><span class="stat-val"
+                id="stat-cpu-speed">0</span></div>
+        <div class="stat-row"><span class="stat-label">POWER HITS</span><span class="stat-val"
+                id="stat-cpu-power">0</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-footer">FIRST TO 7 WINS</div>
+    </div>
+    </div>
+    <script src="script54.js"></script>
+
+</body>
+</html>>
